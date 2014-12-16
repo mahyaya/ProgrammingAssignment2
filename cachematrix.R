@@ -32,7 +32,7 @@ cacheSolve <- function(x, ...) {
 				message("matrix is not square")
 				return(NULL)
 		}
-		if(det(mat)<1e-9){ 
+		if(abs(det(mat))<1e-9){ 
 				message("inverse may be impossible det~0")
                 return(NULL)
 		  }
