@@ -1,7 +1,7 @@
-## Put comments here that give an overall description of what your
-## functions do
+## functions the cache a matrix inverse and read it directly  from cache 
+## instead of calculating everytime which can be very slow 
 
-## Write a short comment describing this function
+## makecachematrix, makes the "objet" where to cache the inverse of the matrix entered as argument
 
 makeCacheMatrix <- function(x = matrix()) {
       inv<-NULL
@@ -16,28 +16,21 @@ makeCacheMatrix <- function(x = matrix()) {
 }
 
 
-## cacheSolve caches the inverse of a matrix (if the matrix isn't square or isn't solvable return's a NULL)
+## cacheSolve caches the inverse of a matrix "x" if not already cached and returns its inverse
 
+## the function can be faster if we add another argument for a verbose mode
+## so we could activate the message (line 28) only if needed
 cacheSolve <- function(x, ...) {
 		## Return a matrix that is the inverse of 'x'
 		inv <- x$getinv()
+		## if the inverse is already set returns the cached data
         if(!is.null(inv)) {
                 message("getting cached data")
                 return(inv)
         }
-		mat <- x$get()
-		## testing if the matrix is solvable
-		dims<-dim(mat)
-		if(dims[1]!=dims[2]){
-				message("matrix is not square")
-				return(NULL)
-		}
-		if(abs(det(mat))<1e-9){ 
-				message("inverse may be impossible det~0")
-                return(NULL)
-		  }
-		  ## So far so good
-		inv <- solve(mat)
+        	## the inverse isn't cached yet need to calculate the inverse and cache it
+		inv <- solve(x$get())
 		x$setinv(inv)
-		inv
+		## return the newly cached inverse
+		return(inv)## could also use : return(x$getinv())
 }
